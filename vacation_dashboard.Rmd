@@ -4,11 +4,13 @@ output:
   flexdashboard::flex_dashboard:
     orientation: rows
     social: menu
+    source_code: https://github.com/jwinternheimer/time-off-dashboard
 runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
-library(flexdashboard); library(dplyr); library(ggplot2); library(plotly); library(openssl)
+library(flexdashboard); library(dplyr); library(ggplot2); 
+library(plotly); library(openssl); library(buffer)
 
 # Read data from csv
 team <- read.csv("./data/data.csv", header = T)
@@ -39,7 +41,7 @@ renderValueBox({
   })
 ```
 
-### Average Days Off
+### Days Off Per Person
 
 ```{r}
 renderValueBox({
@@ -103,7 +105,7 @@ renderPlotly({
   # Create ggplot
   total_days_plot <- ggplot(days_off, aes(x = days_off)) +
     geom_histogram(binwidth = 5, color = 'white', boundary = 0) +
-    labs(x = '', y = '', title = 'Days Off') + 
+    labs(x = 'Days Off', y = 'Team Members', title = '') + 
     buffer_theme() 
   
   # Convert to plotly
