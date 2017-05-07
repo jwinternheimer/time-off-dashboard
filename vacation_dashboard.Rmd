@@ -1,0 +1,113 @@
+---
+title: "Buffer Time Off"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    social: menu
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard); library(dplyr); library(ggplot2); library(plotly); library(openssl)
+
+# Read data from csv
+team <- read.csv("./data/data.csv", header = T)
+```
+
+Sidebar {.sidebar}
+=======================================================================
+
+There are 9 types of leave recorded and tracked at Buffer. Select which types you would like to analyze. :) 
+
+```{r}
+# Select type of time off
+selectInput(inputId = "leave_type", label = "Type of time off:", multiple = TRUE,
+            choices = levels(team$leave_type), selected = "Vacation")
+```
+
+Dashboard
+=======================================================================
+
+Row
+-----------------------------------------------------------------------
+
+### Total Days Off
+
+```{r}
+renderValueBox({
+  valueBox(sum(filter(team, leave_type %in% input$leave_type)$working), icon = "fa-sun-o")
+  })
+```
+
+### Average Days Off
+
+```{r}
+renderValueBox({
+  
+  by_person <- team %>%
+    filter(leave_type %in% input$leave_type) %>%
+    group_by(user) %>%
+    summarise(days_off = sum(working))
+  
+  valueBox(round(mean(by_person$days_off), 2), icon = "fa-tree")
+  
+  })
+```
+
+### Min Days Off
+
+```{r}
+renderValueBox({
+  
+  by_person <- team %>%
+    filter(leave_type %in% input$leave_type) %>%
+    group_by(user) %>%
+    summarise(days_off = sum(working))
+  
+  valueBox(round(min(by_person$days_off), 2), icon = "fa-sun-o")
+  
+  })
+```
+
+### Max Days Off
+
+```{r}
+renderValueBox({
+  
+  by_person <- team %>%
+    filter(leave_type %in% input$leave_type) %>%
+    group_by(user) %>%
+    summarise(days_off = sum(working))
+  
+  valueBox(round(max(by_person$days_off), 2), icon = "fa-tree")
+  
+  
+  })
+```
+
+Row
+-----------------------------------------------------------------------
+
+### Time Off
+
+```{r warning = FALSE, message = FALSE, echo = FALSE}
+  
+renderPlotly({
+  
+  # Calculate days off per team member
+  days_off <- team %>%
+    filter(leave_type %in% input$leave_type) %>%
+    group_by(user) %>%
+    summarise(days_off = sum(working))
+  
+  # Create ggplot
+  total_days_plot <- ggplot(days_off, aes(x = days_off)) +
+    geom_histogram(binwidth = 5, color = 'white', boundary = 0) +
+    labs(x = '', y = '', title = 'Days Off') + 
+    buffer_theme() 
+  
+  # Convert to plotly
+  ggplotly(total_days_plot)
+  
+})
+```

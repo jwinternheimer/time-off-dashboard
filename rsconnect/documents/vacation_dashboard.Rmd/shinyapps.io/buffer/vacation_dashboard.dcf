@@ -1,0 +1,10 @@
+name: vacation_dashboard
+title: vacation_dashboard
+account: buffer
+server: shinyapps.io
+appId: 178583
+bundleId: 818084
+url: https://buffer.shinyapps.io/vacation_dashboard/
+when: 1494163952.40735
+asMultiple: FALSE
+asStatic: FALSE
