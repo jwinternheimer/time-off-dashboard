@@ -3,8 +3,8 @@ title: vacation_dashboard
 account: buffer
 server: shinyapps.io
 appId: 178583
-bundleId: 818118
+bundleId: 818125
 url: https://buffer.shinyapps.io/vacation_dashboard/
-when: 1494167327.45918
+when: 1494167599.92236
 asMultiple: FALSE
 asStatic: FALSE

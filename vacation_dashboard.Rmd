@@ -5,6 +5,7 @@ output:
     orientation: rows
     social: menu
     source_code: https://github.com/jwinternheimer/time-off-dashboard
+favicon: buffer-logo.png
 runtime: shiny
 ---
 
